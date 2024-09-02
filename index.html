@@ -62,10 +62,12 @@
 <b>Detected QR code: </b>
 <span id="file-qr-result">None</span>
 
-<!--<script src="../qr-scanner.umd.min.js"></script>-->
-<!--<script src="../qr-scanner.legacy.min.js"></script>-->
+<!-- Include the QR Scanner script as a module -->
 <script type="module">
-    import QrScanner from "../qr-scanner.min.js";
+    import QrScanner from './qr-scanner.min.js'; // Ensure the path is correct
+
+    // Set the path for the QR scanner worker
+    QrScanner.WORKER_PATH = './qr-scanner-worker.min.js'; // Ensure the path is correct
 
     const video = document.getElementById('qr-video');
     const videoContainer = document.getElementById('video-container');
@@ -108,10 +110,6 @@
 
     scanner.start().then(() => {
         updateFlashAvailability();
-        // List cameras after the scanner started to avoid listCamera's stream and the scanner's stream being requested
-        // at the same time which can result in listCamera's unconstrained stream also being offered to the scanner.
-        // Note that we can also start the scanner after listCameras, we just have it this way around in the demo to
-        // start the scanner earlier.
         QrScanner.listCameras(true).then(cameras => cameras.forEach(camera => {
             const option = document.createElement('option');
             option.value = camera.id;
